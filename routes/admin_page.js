@@ -6,15 +6,18 @@ var expressValidator = require('express-validator');
 router.use(expressValidator());
 
 var Page = require('../models/page');
+router.use( jsonParser = bodyParser.json());
+router.use( urlencodedParser = bodyParser.urlencoded({ extended: false }));
 
 router.get('/pages',function (req,res) {
 
-    res.send('admin area');
+    Page.find({}).sort({sorting:1}).exec(function(err,pages){
+        res.render('admin/pages',{pages:pages})
+    })
 
 })
 
-router.use( jsonParser = bodyParser.json());
-router.use( urlencodedParser = bodyParser.urlencoded({ extended: false }));
+
 
 router.get('/addpage',function (req,res) {
 
@@ -98,6 +101,26 @@ router.post('/addpage',function (req,res) {
 
 
 
+
+})
+
+
+
+//get edit page
+router.get('/edit-page/:slug',function (req,res) {
+
+    
+    Page.findById(req.params.id, function (err, page) {
+        if (err)
+            return console.log(err);
+
+        res.render('admin/edit_page', {
+            title: page.title,
+            slug: page.slug,
+            content: page.content,
+            id: page._id
+        });
+    });
 
 })
 
