@@ -110,11 +110,11 @@ router.post('/addpage',function (req,res) {
 router.get('/edit-page/:slug',function (req,res) {
 
     
-    Page.findById(req.params.id, function (err, page) {
+    Page.findOne({slug:req.params.slug}, function (err, page) {
         if (err)
             return console.log(err);
 
-        res.render('admin/edit_page', {
+        res.render('admin/edit-page', {
             title: page.title,
             slug: page.slug,
             content: page.content,
